@@ -1,3 +1,45 @@
+# Description
+
+This is a simple To-Do List application that demonstrates,
+- CRUD operations using GraphQL
+- Authentication using NextAuth
+- Authorization using a basic RBAC (Role-Based Access Control) system
+
+### User Types
+
+- **ADMIN**
+- **VIEWER**
+
+### User Permissions
+
+- **Admin**
+  - `Create`, `Read` and `Delete` To-Do Items
+  - `Read` All Users
+  - `Update` User Role
+
+- **Viewer**
+  - `Read` To-Do Items
+
+### File Structure
+
++ `global-voices/server.js` - GraphQL Server
++ `global-voices/lib/apolloClient.ts` - Apollo Client
++ `global-voices/lib/prisma.ts` - Prisma Client
++ `global-voices/lib/authz.ts` - Authorization Policies
+
+
+
+---
+
+**Note:** For simplicity, I'm running GraphQL (Apollo) server and Next.js server in the same node.js process.
+
+- Next.js - port `3000`
+- GraphQL - port `4000`
+
+
+---
+
+
 ## Tech Stack
 
 - [Next.js](https://nextjs.org) - Framework
@@ -10,6 +52,9 @@
 - [TailwindCSS](https://tailwindcss.com) - CSS Framework
 - [NextAuth](https://next-auth.js.org) - Authentication
 - [bcrypt](https://www.npmjs.com/package/bcrypt) - Password (Hashing, Comparing)
+- [React Icons](https://react-icons.github.io/react-icons) - Icons
+
+---
 
 ### Install Dependencies
 
@@ -29,19 +74,11 @@ Run the following command to start the Apollo Server:
 ```
 
 
-## Getting Started
+### Start the Development Server
 
-First, run the development server:
+Run the following command to start the development server:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+  npm run dev
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 

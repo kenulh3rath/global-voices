@@ -1,10 +1,10 @@
-import { prisma } from '@/lib/prisma'
 import { compare } from 'bcrypt'
 import NextAuth, { type NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import client from '@/lib/apolloClient'
 import { gql } from '@apollo/client'
 
+// GraphQL Query
 const GetUserLogin = gql`
     query GetUserLoginByEmail($email: String!) {
         getUserLoginByEmail(email: $email) {
@@ -36,12 +36,11 @@ export const authOptions: NextAuthOptions = {
                 password: { label: 'Password', type: 'password' }
             },
             async authorize(credentials) {
+
                 // Missing credentials
                 if (!credentials?.email || !credentials.password) {
                     return null
                 }
-
-                console.log('Credentials', credentials)
 
                 // Get user from database
                 const {data} = await client.query({
@@ -51,34 +50,20 @@ export const authOptions: NextAuthOptions = {
                     }
                 })
 
-                console.log('Data', data)
-                console.log('Data.getUserLoginByEmail', data.getUserLoginByEmail)
-
                 // If user not found
                 if (!data.getUserLoginByEmail) {
                     return null
                 }
-                console.log('Data.getUserLoginByEmail', data.getUserLoginByEmail)
-
-                // const user = await prisma.user.findUnique({
-                //     where: {
-                //         email: credentials.email
-                //     }
-                // })
-
-                // if (!user) {
-                //     return null
-                // }
 
                 const user = data.getUserLoginByEmail
 
-                // const isPasswordValid = await compare(
-                //     credentials.password,
-                //     user.password
-                // )
+                // Check password
+                const isPasswordValid = await compare(
+                    credentials.password,
+                    user.password
+                )
 
-                const isPasswordValid = credentials.password === user.password
-
+                // If password is invalid
                 if (!isPasswordValid) {
                     return null
                 }
@@ -88,7 +73,6 @@ export const authOptions: NextAuthOptions = {
                     email: user.email,
                     name: user.name,
                     role: user.user.role,
-                    randomKey: 'Hey cool'
                 }
             }
         })
@@ -102,19 +86,17 @@ export const authOptions: NextAuthOptions = {
                     ...session.user,
                     id: token.id,
                     role: token.role,
-                    randomKey: token.randomKey
                 }
             }
         },
         jwt: ({ token, user }) => {
             console.log('JWT Callback', { token, user })
             if (user) {
-                const u = user as unknown as any
+                const u = user as unknown as { id: string, role: string }
                 return {
                     ...token,
                     id: u.id,
                     role: u.role,
-                    randomKey: u.randomKey
                 }
             }
             return token

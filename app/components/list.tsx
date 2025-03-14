@@ -6,10 +6,12 @@ import {ValidatePermissions} from "@/lib/authz";
 import {Button} from "@/components/ui/button";
 import { toast } from "sonner"
 import NewToDoForm from "@/app/components/newToDoForm";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 
 interface Props {
-    role: string
+    role: string,
+    userId: string
 }
 
 // Todo_item types
@@ -51,11 +53,11 @@ const CREATE_TODO = gql`
 `
 
 const Index = (
-    {role}: Props
+    {role, userId}: Props
 ) => {
 
     // ~~~~ Queries and Mutations ~~~~
-    const { data: todos, error: listError } = useQuery(Get_TODOs);
+    const { data: todos, error: listError, loading: listLoading } = useQuery(Get_TODOs);
     const [deleteTodo] = useMutation(DELETE_TODO, {
         update(cache, { data: { deleteTodoItem } }) {
             const existingTodos = cache.readQuery<{ getTodoLists: todos_type[] }>({ query: Get_TODOs });
@@ -101,7 +103,7 @@ const Index = (
                 variables: {
                     title: data.title,
                     description: data.desc,
-                    userID: "cm88iy3u70000wo7cq7ep5z1j"
+                    userID: userId
                 }
             })
 
@@ -146,6 +148,7 @@ const Index = (
 
 
 
+    // If there is an error
     if (listError) {
         return (
             <div
@@ -174,6 +177,18 @@ const Index = (
             }
 
             <div className="basis-10/12 flex flex-col gap-5 w-full h-full overflow-auto">
+                {
+                    // While querying
+                    listLoading &&
+                    <p
+                        className={'flex justify-center items-center text-gray-600'}
+                    >
+                        <AiOutlineLoading3Quarters
+                            className={'animate-spin'}
+                        />
+                    </p>
+                }
+
                 {
                     // Check if the query returns
                     todos ?
@@ -218,11 +233,7 @@ const Index = (
                             ))
                         // while querying
                         :
-                        <p
-                            className={'text-center p-2 text-gray-600'}
-                        >
-                            Loading
-                        </p>
+                        null
                 }
             </div>
 

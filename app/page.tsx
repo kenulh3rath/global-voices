@@ -6,7 +6,8 @@ import { authOptions } from './api/auth/[...nextauth]/route'
 
 export default async function Home() {
 
-    const session = await getServerSession(authOptions)
+    // Get the user session
+    const session: { user: { role: string, id: string } } | null = await getServerSession(authOptions)
 
 
     return (
@@ -24,6 +25,7 @@ export default async function Home() {
 
                 <List
                     role={session?.user?.role || 'VIEWER'}
+                    userId={session?.user?.id || ''}
                 />
 
             </div>
