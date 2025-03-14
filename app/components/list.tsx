@@ -162,67 +162,76 @@ const Index = (
     }
 
     return (
-        <div className="grid gap-5 w-full">
+        <div className="flex flex-col gap-5 w-full h-full">
             {
                 // Check if the user has permission to create a new todo_item
                 ValidatePermissions(user.role, 'TODO', 'CREATE') &&
                 (
-                    <NewToDoForm
-                        onSubmit={OnCreateClick}
-                    />
+                    <div
+                        className={'flex justify-end'}
+                    >
+                        <NewToDoForm
+                            onSubmit={OnCreateClick}
+                        />
+                    </div>
+
                 )
             }
 
-            {
-                // Check if the query returns
-                todos ?
-                    // If query returns null
-                    todos.getTodoLists.length === 0 ?
+            <div className="basis-10/12 flex flex-col gap-5 w-full h-full overflow-auto">
+                {
+                    // Check if the query returns
+                    todos ?
+                        // If query returns null
+                        todos.getTodoLists.length === 0 ?
+                            <p
+                                className={'text-center p-2 text-lg text-gray-600'}
+                            >
+                                Todo list is empty
+                            </p>
+
+                            // If query returns data
+                            :
+                            todos.getTodoLists.map((todo: todos_type) => (
+                                <div
+                                    key={todo.id}
+                                    className={'w-full h-fit flex items-center gap-2 p-2 rounded-lg shadow-md bg-gray-50 duration-200 ease-in-out hover:bg-gray-100'}
+                                >
+                                    <div className="basis-11/12 flex flex-col space-y-2">
+                                        <h4 className="text-lg font-semibold">{todo.title}</h4>
+                                        <p
+                                            className={'mx-2 text-wrap w-4/5 text-slate-600'}
+                                        >{todo.description}</p>
+                                    </div>
+
+                                    {
+                                        // Check if the user has permission to delete the todo_item
+                                        ValidatePermissions(user.role, 'TODO', 'DELETE') &&
+                                        (
+                                            <Button
+                                                onClick={() => OnDeleteClick(todo.id)}
+                                                disabled={listItem === todo.id}
+                                                className={'basis-1/12'}
+                                            >
+                                                {
+                                                    listItem === todo.id ? 'Deleting...' : 'Delete'
+                                                }
+                                            </Button>
+                                        )
+                                    }
+                                </div>
+                            ))
+                        // while querying
+                        :
                         <p
-                            className={'text-center p-2 text-lg text-gray-600'}
+                            className={'text-center p-2 text-gray-600'}
                         >
-                            Todo list is empty
+                            Loading
                         </p>
+                }
+            </div>
 
-                    // If query returns data
-                    :
-                        todos.getTodoLists.map((todo: todos_type) => (
-                        <div
-                            key={todo.id}
-                            className={'w-full flex items-center gap-2 p-2 rounded-lg shadow-md bg-gray-50 duration-200 ease-in-out hover:bg-gray-100'}
-                        >
-                            <div className="basis-11/12 flex flex-col space-y-2">
-                                <h4 className="text-lg font-semibold">{todo.title}</h4>
-                                <p
-                                    className={'mx-2 text-wrap w-4/5 text-slate-600'}
-                                >{todo.description}</p>
-                            </div>
 
-                            {
-                                // Check if the user has permission to delete the todo_item
-                                ValidatePermissions(user.role, 'TODO', 'DELETE') &&
-                                (
-                                    <Button
-                                        onClick={() => OnDeleteClick(todo.id)}
-                                        disabled={listItem === todo.id}
-                                        className={'basis-1/12'}
-                                    >
-                                        {
-                                            listItem === todo.id ? 'Deleting...' : 'Delete'
-                                        }
-                                    </Button>
-                                )
-                            }
-                        </div>
-                    ))
-                // while querying
-                :
-                    <p
-                        className={'text-center p-2 text-gray-600'}
-                    >
-                        Loading
-                    </p>
-            }
         </div>
     )
 }

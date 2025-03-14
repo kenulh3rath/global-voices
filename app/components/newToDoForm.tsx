@@ -33,7 +33,7 @@ const Index = (
             open={dialogOpen}
         >
             <DialogTrigger
-                className={'flex w-fit justify-self-end mr-2 bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 h-9 px-4 py-2 has-[>svg]:px-3 rounded-md text-sm font-medium'}
+                className={'mr-2 bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 h-9 px-4 py-2 has-[>svg]:px-3 rounded-md text-sm font-medium'}
             >
                 Create
             </DialogTrigger>
