@@ -9,13 +9,13 @@ ROLES
 
 // Authorization Policies
 const POLICIES = {
-    owner: [
+    admin: [
         "TODO::CREATE",
         "TODO::READ",
         "TODO::UPDATE",
         "TODO::DELETE"
     ],
-    user: [
+    viewer: [
         "TODO::READ"
     ]
 }
@@ -29,5 +29,5 @@ export const ValidatePermissions = (role: string, resource: string, action: stri
         return false;
     }
 
-    return permissions.includes(action + "::" + resource);
+    return permissions.includes(`${resource}::${action}`);
 }
