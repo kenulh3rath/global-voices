@@ -5,6 +5,7 @@ import { useQuery, useMutation, gql } from "@apollo/client";
 import {ValidatePermissions} from "@/lib/authz";
 import {Button} from "@/components/ui/button";
 import { toast } from "sonner"
+import NewToDoForm from "@/app/components/newToDoForm";
 
 
 interface Props {
@@ -93,12 +94,18 @@ const Index = (
     const [listItem, setListItem] = useState<string>('')
 
     // Add a new todo_item
-    const OnCreateClick = async () => {
+    const OnCreateClick = async (formData: FormData) => {
+
+        const data = {
+            title: formData.get('title') as string || '',
+            desc: formData.get('desc') as string || '',
+        }
+
         try {
             await createTodo({
                 variables: {
-                    title: 'New Todo',
-                    description: 'New Todo Description',
+                    title: data.title,
+                    description: data.desc,
                     userID: "cm88iy3u70000wo7cq7ep5z1j"
                 }
             })
@@ -155,17 +162,14 @@ const Index = (
     }
 
     return (
-        <div className="grid gap-5">
+        <div className="grid gap-5 w-full">
             {
                 // Check if the user has permission to create a new todo_item
                 ValidatePermissions(user.role, 'TODO', 'CREATE') &&
                 (
-                    <Button
-                        onClick={OnCreateClick}
-                        className={'flex w-fit justify-self-end mr-2'}
-                    >
-                        Create
-                    </Button>
+                    <NewToDoForm
+                        onSubmit={OnCreateClick}
+                    />
                 )
             }
 
@@ -185,12 +189,12 @@ const Index = (
                         todos.getTodoLists.map((todo: todos_type) => (
                         <div
                             key={todo.id}
-                            className={'flex items-center gap-2 p-2 rounded-lg shadow-md bg-gray-50 duration-200 ease-in-out hover:bg-gray-100'}
+                            className={'w-full flex items-center gap-2 p-2 rounded-lg shadow-md bg-gray-50 duration-200 ease-in-out hover:bg-gray-100'}
                         >
-                            <div className="grow space-y-2">
+                            <div className="basis-11/12 flex flex-col space-y-2">
                                 <h4 className="text-lg font-semibold">{todo.title}</h4>
                                 <p
-                                    className={'mx-2'}
+                                    className={'mx-2 text-wrap w-4/5 text-slate-600'}
                                 >{todo.description}</p>
                             </div>
 
@@ -201,6 +205,7 @@ const Index = (
                                     <Button
                                         onClick={() => OnDeleteClick(todo.id)}
                                         disabled={listItem === todo.id}
+                                        className={'basis-1/12'}
                                     >
                                         {
                                             listItem === todo.id ? 'Deleting...' : 'Delete'
