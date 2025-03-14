@@ -48,11 +48,11 @@ const TypeDefs = `#graphql
     }
     
     type Query {
-        getUsers: [User]!  # Get all users
+        getUsers: [User]  # Get all users
         getUserByID(id: ID!): User  # Get user by ID
         
-        getTodoLists: [TodoList]!  # Get all todo lists
-        getTodoListByID(id: ID!): TodoList  # Get todo list by ID
+        getTodoLists: [TodoList]  # Get all todo_lists
+        getTodoListByID(id: ID!): TodoList  # Get todo_list by ID
     }
     
     type Mutation {
@@ -61,6 +61,8 @@ const TypeDefs = `#graphql
             lastName: String!,
             email: String!
         ): User!  # Create a new user
+        
+        deleteTodoItem(id: ID!): TodoList!  # Delete a todo_item
     }
 
 `
@@ -108,6 +110,7 @@ const Resolvers = {
         }
     },
     Mutation: {
+        /** Create User **/
         createUser: (_parent, args) => {
             const { firstName, lastName, email } = args
 
@@ -119,6 +122,23 @@ const Resolvers = {
             }
             users.push(newUser)
             return newUser
+        },
+
+        /**  Delete Todo_item **/
+        deleteTodoItem: async (_parent, args) => {
+            const { id } = args
+            const deleteItem = await prisma.todoList.delete({
+                where: {
+                    id: id
+                },
+                select: {
+                    id: true
+                }
+            })
+
+            return {
+                id: deleteItem.id
+            }
         }
     }
 }
