@@ -9,14 +9,14 @@ ROLES
 
 // Authorization Policies
 const POLICIES = {
-    admin: [
+    ADMIN: [
         "TODO::CREATE",
         "TODO::READ",
         "TODO::UPDATE",
         "TODO::DELETE"
     ],
-    viewer: [
-        "TODO::READ"
+    VIEWER: [
+        "TODO::READ",
     ]
 }
 

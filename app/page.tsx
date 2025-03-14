@@ -1,16 +1,12 @@
 
 import List from "@/app/components/list";
+import { getServerSession } from 'next-auth'
+import { authOptions } from './api/auth/[...nextauth]/route'
 
 
 export default async function Home() {
 
-
-    const user = {
-        name: 'John Doe',
-        age: 30,
-        email: 'test@test.dev',
-        role: 'admin'
-    }
+    const session = await getServerSession(authOptions)
 
 
     return (
@@ -27,10 +23,11 @@ export default async function Home() {
                 </h3>
 
                 <List
-                    user={user}
+                    role={session?.user?.role || 'VIEWER'}
                 />
 
             </div>
+
         </div>
     );
 }

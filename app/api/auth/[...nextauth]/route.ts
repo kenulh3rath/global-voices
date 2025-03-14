@@ -11,6 +11,7 @@ const GetUserLogin = gql`
             email
             password
             user {
+                id
                 firstName
                 lastName
                 role
@@ -83,9 +84,10 @@ export const authOptions: NextAuthOptions = {
                 }
 
                 return {
-                    id: user.id + '',
+                    id: user.user.id + '',
                     email: user.email,
                     name: user.name,
+                    role: user.user.role,
                     randomKey: 'Hey cool'
                 }
             }
@@ -99,6 +101,7 @@ export const authOptions: NextAuthOptions = {
                 user: {
                     ...session.user,
                     id: token.id,
+                    role: token.role,
                     randomKey: token.randomKey
                 }
             }
@@ -110,6 +113,7 @@ export const authOptions: NextAuthOptions = {
                 return {
                     ...token,
                     id: u.id,
+                    role: u.role,
                     randomKey: u.randomKey
                 }
             }

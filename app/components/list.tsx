@@ -9,12 +9,7 @@ import NewToDoForm from "@/app/components/newToDoForm";
 
 
 interface Props {
-    user: {
-        name: string
-        age: number
-        email: string
-        role: string
-    }
+    role: string
 }
 
 // Todo_item types
@@ -56,7 +51,7 @@ const CREATE_TODO = gql`
 `
 
 const Index = (
-    {user}: Props
+    {role}: Props
 ) => {
 
     // ~~~~ Queries and Mutations ~~~~
@@ -165,7 +160,7 @@ const Index = (
         <div className="flex flex-col gap-5 w-full h-full">
             {
                 // Check if the user has permission to create a new todo_item
-                ValidatePermissions(user.role, 'TODO', 'CREATE') &&
+                ValidatePermissions(role, 'TODO', 'CREATE') &&
                 (
                     <div
                         className={'flex justify-end'}
@@ -206,7 +201,7 @@ const Index = (
 
                                     {
                                         // Check if the user has permission to delete the todo_item
-                                        ValidatePermissions(user.role, 'TODO', 'DELETE') &&
+                                        ValidatePermissions(role, 'TODO', 'DELETE') &&
                                         (
                                             <Button
                                                 onClick={() => OnDeleteClick(todo.id)}
