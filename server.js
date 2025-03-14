@@ -38,6 +38,13 @@ const TypeDefs = `#graphql
         firstName: String!,
         lastName: String!,
         email: String!,
+        role: String!
+    }
+
+    type UserLogin {
+        email: ID!,
+        password: String!
+        user: User!
     }
 
     type TodoList {
@@ -50,6 +57,8 @@ const TypeDefs = `#graphql
     type Query {
         getUsers: [User]  # Get all users
         getUserByID(id: ID!): User  # Get user by ID
+        getUserByEmail(email: String!): User  # Get user by email
+        getUserLoginByEmail(email: String!): UserLogin  # Get user login by email
         
         getTodoLists: [TodoList]  # Get all todo_lists
         getTodoListByID(id: ID!): TodoList  # Get todo_list by ID
@@ -94,6 +103,33 @@ const Resolvers = {
             })
         },
 
+        // Get User by Email
+        getUserByEmail: async (
+            _parent,
+            args) => {
+            const { email } = args
+            return prisma.user.findUnique({
+                where: {
+                    email: email
+                }
+            })
+        },
+
+        // Get User Login by Email
+        getUserLoginByEmail: async (
+            _parent,
+            args) => {
+            const { email } = args
+            return prisma.userLogin.findUnique({
+                where: {
+                    email: email
+                },
+                include: {
+                    user: true
+                }
+            })
+        },
+
         // Get Todo Lists
         getTodoLists: async () => {
             return prisma.todoList.findMany({
@@ -117,17 +153,18 @@ const Resolvers = {
     },
     Mutation: {
         /** Create User **/
-        createUser: (_parent, args) => {
+        createUser: async (_parent, args) => {
             const { firstName, lastName, email } = args
 
-            const newUser = {
-                id: String(users.length + 1),
-                firstName: firstName,
-                lastName: lastName,
-                email: email
-            }
-            users.push(newUser)
-            return newUser
+            return prisma.user.create({
+                data: {
+                    firstName: firstName,
+                    lastName: lastName,
+                    email: email,
+                    role: 'USER'
+                }
+            })
+
         },
 
         /** Create Todo_list **/

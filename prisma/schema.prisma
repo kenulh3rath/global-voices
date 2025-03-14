@@ -11,12 +11,19 @@ datasource db {
 }
 
 model User {
-  id        String     @id @default(cuid())
+  id        String      @id @default(cuid())
   firstName String
   lastName  String
-  email     String
+  email     String      @unique
   role      String
   TodoList  TodoList[]
+  UserLogin UserLogin[]
+}
+
+model UserLogin {
+  email    String @id
+  password String
+  user     User   @relation(fields: [email], references: [email])
 }
 
 model TodoList {
