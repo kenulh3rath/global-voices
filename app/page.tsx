@@ -19,7 +19,7 @@ export default async function Home() {
         >
 
             <div
-                className={'w-3/4 p-2 rounded-lg shadow-2xl space-y-4'}
+                className={'w-3/4 h-5/6 p-2 rounded-lg shadow-2xl space-y-4 overflow-auto'}
             >
 
                 <h3 className="text-4xl text-center font-bold">

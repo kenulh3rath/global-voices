@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "@/components/ui/sonner"
 import ApolloWrapper from "@/lib/apolloWrapper"
 
 const geistSans = Geist({
@@ -31,6 +32,7 @@ export default function RootLayout({
           <ApolloWrapper>
               {children}
           </ApolloWrapper>
+          <Toaster />
       </body>
     </html>
   );
