@@ -62,6 +62,12 @@ const TypeDefs = `#graphql
             email: String!
         ): User!  # Create a new user
         
+        createTodoList(
+            title: String!,
+            description: String!,
+            userID: ID!
+        ): TodoList!  # Create a new todo_list
+        
         deleteTodoItem(id: ID!): TodoList!  # Delete a todo_item
     }
 
@@ -122,6 +128,18 @@ const Resolvers = {
             }
             users.push(newUser)
             return newUser
+        },
+
+        /** Create Todo_list **/
+        createTodoList: async (_parent, args) => {
+            const { title, description, userID } = args
+            return prisma.todoList.create({
+                data: {
+                    title: title,
+                    description: description,
+                    userId: userID
+                }
+            })
         },
 
         /**  Delete Todo_item **/

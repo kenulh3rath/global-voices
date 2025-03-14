@@ -3,6 +3,7 @@
 import { useQuery, useMutation, gql } from "@apollo/client";
 import {ValidatePermissions} from "@/lib/authz";
 import {Button} from "@/components/ui/button";
+import {useState} from "react";
 
 interface Props {
     user: {
@@ -29,6 +30,7 @@ const Get_TODOs = gql`
     }
 `
 
+// Delete a todo_item
 const DELETE_TODO = gql`
     mutation DeleteTODO($id: ID!) {
         deleteTodoItem(id: $id) {
@@ -37,13 +39,23 @@ const DELETE_TODO = gql`
     }
 `
 
+// Create a new todo_item
+const CREATE_TODO = gql`
+    mutation createTODO($title: String!, $description: String!, $userID: ID!) {
+        createTodoList(title: $title, description: $description, userID: $userID) {
+            title,
+            description,
+            id
+        }
+    }
+`
 
 const Index = (
     {user}: Props
 ) => {
 
     const { data: todos, error: listError } = useQuery(Get_TODOs);
-    const [deleteTodo, { loading: deleteLoading }] = useMutation(DELETE_TODO, {
+    const [deleteTodo] = useMutation(DELETE_TODO, {
         update(cache, { data: { deleteTodoItem } }) {
             const existingTodos = cache.readQuery<{ getTodoLists: todos_type[] }>({ query: Get_TODOs });
 
@@ -57,12 +69,43 @@ const Index = (
             }
         },
     });
+    const [createTodo] = useMutation(CREATE_TODO, {
+        update(cache, { data: { createTodoList } }) {
+            const existingTodos = cache.readQuery<{ getTodoLists: todos_type[] }>({ query: Get_TODOs });
 
+            if (existingTodos) {
+                cache.writeQuery({
+                    query: Get_TODOs,
+                    data: {
+                        getTodoLists: [...existingTodos.getTodoLists, createTodoList],
+                    },
+                });
+            }
+        },
+    });
+
+    const [listItem, setListItem] = useState<string>('')
+
+    const OnCreateClick = async () => {
+        try {
+            await createTodo({
+                variables: {
+                    title: 'New Todo',
+                    description: 'New Todo Description',
+                    userID: "cm88iy3u70000wo7cq7ep5z1j"
+                }
+            })
+        }
+        catch (error) {
+            console.log(error);
+            console.error(error);
+        }
+    }
 
     const OnDeleteClick = async (itemID: string) => {
-        console.log("click", itemID);
-
+        
         try {
+            setListItem(itemID);
 
             await deleteTodo({
                 variables: {
@@ -73,6 +116,9 @@ const Index = (
         }
         catch (error) {
             console.error(error);
+        }
+        finally {
+            setListItem('');
         }
     }
 
@@ -88,6 +134,17 @@ const Index = (
 
     return (
         <div className="grid gap-2">
+            {
+                // Check if the user has permission to create a new todo_item
+                ValidatePermissions(user.role, 'TODO', 'CREATE') &&
+                (
+                    <Button
+                        onClick={OnCreateClick}
+                    >
+                        Create
+                    </Button>
+                )
+            }
 
             {
                 todos ?
@@ -110,9 +167,10 @@ const Index = (
                                 (
                                     <Button
                                         onClick={() => OnDeleteClick(todo.id)}
+                                        disabled={listItem === todo.id}
                                     >
                                         {
-                                            deleteLoading ? 'Deleting...' : 'Delete'
+                                            listItem === todo.id ? 'Deleting...' : 'Delete'
                                         }
                                     </Button>
                                 )
