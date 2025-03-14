@@ -39,10 +39,20 @@ const TypeDefs = `#graphql
         lastName: String!,
         email: String!,
     }
+
+    type TodoList {
+        id: ID!,
+        title: String!,
+        description: String!,
+        user: User!
+    }
     
     type Query {
         getUsers: [User]!  # Get all users
         getUserByID(id: ID!): User  # Get user by ID
+        
+        getTodoLists: [TodoList]!  # Get all todo lists
+        getTodoListByID(id: ID!): TodoList  # Get todo list by ID
     }
     
     type Mutation {
@@ -58,16 +68,39 @@ const TypeDefs = `#graphql
 // GraphQL Resolvers
 const Resolvers = {
     Query: {
+
+        // Get Users
         getUsers: async () => {
-            // return users
             return prisma.user.findMany({})
         },
+
+        // Get User by ID
         getUserByID: async (
             _parent,
             args) => {
             const { id } = args
-            // return users.find((user) => user.id === id)
             return prisma.user.findUnique({
+                where: {
+                    id: id
+                }
+            })
+        },
+
+        // Get Todo Lists
+        getTodoLists: async () => {
+            return prisma.todoList.findMany({
+                include: {
+                    user: true
+                }
+            })
+        },
+
+        // Get Todo List by ID
+        getTodoListByID: async (
+            _parent,
+            args) => {
+            const {id} = args
+            return prisma.todoList.findUnique({
                 where: {
                     id: id
                 }
