@@ -71,6 +71,11 @@ const TypeDefs = `#graphql
             email: String!
         ): User!  # Create a new user
         
+        updateUserRoleByID(
+            id: ID!,
+            role: String!
+        ): User!  # Update user role by ID
+        
         createTodoList(
             title: String!,
             description: String!,
@@ -165,6 +170,19 @@ const Resolvers = {
                 }
             })
 
+        },
+
+        /** Update User Role by ID **/
+        updateUserRoleByID: async (_parent, args) => {
+            const { id, role } = args
+            return prisma.user.update({
+                where: {
+                    id: id
+                },
+                data: {
+                    role: role
+                }
+            })
         },
 
         /** Create Todo_list **/

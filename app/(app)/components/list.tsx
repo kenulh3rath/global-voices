@@ -5,7 +5,7 @@ import { useQuery, useMutation, gql } from "@apollo/client";
 import {ValidatePermissions} from "@/lib/authz";
 import {Button} from "@/components/ui/button";
 import { toast } from "sonner"
-import NewToDoForm from "@/app/components/newToDoForm";
+import NewToDoForm from "./newToDoForm";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 

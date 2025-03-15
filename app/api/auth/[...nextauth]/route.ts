@@ -24,6 +24,9 @@ export const authOptions: NextAuthOptions = {
     session: {
         strategy: 'jwt'
     },
+    pages: {
+        signIn: '/login',
+    },
     providers: [
         CredentialsProvider({
             name: 'Sign in',
@@ -39,7 +42,7 @@ export const authOptions: NextAuthOptions = {
 
                 // Missing credentials
                 if (!credentials?.email || !credentials.password) {
-                    return null
+                    throw new Error('Missing credentials')
                 }
 
                 // Get user from database
@@ -52,7 +55,7 @@ export const authOptions: NextAuthOptions = {
 
                 // If user not found
                 if (!data.getUserLoginByEmail) {
-                    return null
+                    throw new Error('Invalid email or password')
                 }
 
                 const user = data.getUserLoginByEmail
@@ -65,7 +68,7 @@ export const authOptions: NextAuthOptions = {
 
                 // If password is invalid
                 if (!isPasswordValid) {
-                    return null
+                    throw new Error('Invalid email or password')
                 }
 
                 return {
