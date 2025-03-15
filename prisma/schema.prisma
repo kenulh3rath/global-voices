@@ -15,7 +15,7 @@ model User {
   firstName String
   lastName  String
   email     String      @unique
-  role      String
+  role      String      @default("VIEWER")
   TodoList  TodoList[]
   UserLogin UserLogin[]
 }

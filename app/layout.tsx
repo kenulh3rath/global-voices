@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner"
 import ApolloWrapper from "@/lib/apolloWrapper"
+import Navbar from "@/components/navbar/navbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,7 +31,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
           <ApolloWrapper>
-              {children}
+              <Navbar />
+              <div className="w-screen h-[calc(100%-3rem)] p-4">
+                  {children}
+              </div>
           </ApolloWrapper>
           <Toaster />
       </body>

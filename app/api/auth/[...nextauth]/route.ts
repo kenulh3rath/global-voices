@@ -71,7 +71,8 @@ export const authOptions: NextAuthOptions = {
                 return {
                     id: user.user.id + '',
                     email: user.email,
-                    name: user.name,
+                    firstName: user.user.firstName,
+                    lastName: user.user.lastName,
                     role: user.user.role,
                 }
             }
@@ -79,23 +80,25 @@ export const authOptions: NextAuthOptions = {
     ],
     callbacks: {
         session: ({ session, token }) => {
-            console.log('Session Callback', { session, token })
             return {
                 ...session,
                 user: {
                     ...session.user,
                     id: token.id,
+                    firstName: token.firstName,
+                    lastName: token.lastName,
                     role: token.role,
                 }
             }
         },
         jwt: ({ token, user }) => {
-            console.log('JWT Callback', { token, user })
             if (user) {
-                const u = user as unknown as { id: string, role: string }
+                const u = user as unknown as { id: string, role: string, firstName: string, lastName: string }
                 return {
                     ...token,
                     id: u.id,
+                    firstName: u.firstName,
+                    lastName: u.lastName,
                     role: u.role,
                 }
             }
