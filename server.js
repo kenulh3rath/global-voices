@@ -43,7 +43,8 @@ const TypeDefs = `#graphql
 
     type UserLogin {
         email: ID!,
-        password: String!
+        password: String!,
+        attempts: Int!,
         user: User!
     }
 
@@ -82,6 +83,11 @@ const TypeDefs = `#graphql
             id: ID!,
             role: String!
         ): User!  # Update user role by ID
+        
+        updateLoginAttemptsByEmail(
+            email: String!,
+            attempts: Int!
+        ): UserLogin!  # Update user login attempts by email
         
         createTodoList(
             title: String!,
@@ -230,6 +236,19 @@ const Resolvers = {
                 },
                 data: {
                     role: role
+                }
+            })
+        },
+
+        /** Update User Login Attempts by Email **/
+        updateLoginAttemptsByEmail: async (_parent, args) => {
+            const { email, attempts } = args
+            return prisma.userLogin.update({
+                where: {
+                    email: email
+                },
+                data: {
+                    attempts: attempts
                 }
             })
         },

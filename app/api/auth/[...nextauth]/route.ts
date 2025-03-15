@@ -4,18 +4,43 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import client from '@/lib/apolloClient'
 import { gql } from '@apollo/client'
 
+const USER_LOGIN_ATTEMPTS = 5
+
+type userLogin = {
+    email: string
+    password: string
+    attempts: number
+    user: {
+        id: string
+        firstName: string
+        lastName: string
+        role: string
+    }
+}
+
 // GraphQL Query
 const GetUserLogin = gql`
     query GetUserLoginByEmail($email: String!) {
         getUserLoginByEmail(email: $email) {
             email
             password
+            attempts
             user {
                 id
                 firstName
                 lastName
                 role
             }
+        }
+    }
+`
+
+
+// Update user login attempts
+const UpdateLoginAttemptsByEmail = gql`
+    mutation UpdateLoginAttemptsByEmail($email: String!, $attempts: Int!) {
+        updateLoginAttemptsByEmail(email: $email, attempts: $attempts) {
+            email
         }
     }
 `
@@ -40,6 +65,8 @@ export const authOptions: NextAuthOptions = {
             },
             async authorize(credentials) {
 
+
+
                 // Missing credentials
                 if (!credentials?.email || !credentials.password) {
                     throw new Error('Missing credentials')
@@ -59,7 +86,13 @@ export const authOptions: NextAuthOptions = {
                     throw new Error('Invalid email or password')
                 }
 
-                const user = data.getUserLoginByEmail
+                const user: userLogin = data.getUserLoginByEmail
+
+                // ~~~~~~ Mutation ~~~~~~
+                // const {data} = await client.mutate({
+                //     mutation: UpdateLoginAttemptsByEmail,
+                //     fetchPolicy: 'no-cache'
+                // })
 
                 // Check password
                 const isPasswordValid = await compare(
@@ -69,7 +102,23 @@ export const authOptions: NextAuthOptions = {
 
                 // If password is invalid
                 if (!isPasswordValid) {
-                    throw new Error('Invalid email or password')
+
+                    // Check if user has reached the maximum login attempts
+                    if (user.attempts >= USER_LOGIN_ATTEMPTS || (user.attempts + 1) === USER_LOGIN_ATTEMPTS) {
+                        throw new Error('Login attempts exceeded. Please Contact Support')
+                    }
+
+                    // Update login attempts
+                    await client.mutate({
+                        mutation: UpdateLoginAttemptsByEmail,
+                        variables: {
+                            email: credentials.email,
+                            attempts: user.attempts + 1
+                        },
+                        fetchPolicy: 'no-cache'
+                    })
+
+                    throw new Error('Invalid password. You have ' + (USER_LOGIN_ATTEMPTS - (user.attempts + 1)) + ' attempts left')
                 }
 
                 return {
