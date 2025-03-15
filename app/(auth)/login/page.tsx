@@ -37,6 +37,7 @@ const Page = () => {
             }
             else {
                 setError(res.error)
+                setLoading(false)
             }
         }
         catch (e) {

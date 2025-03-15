@@ -27,6 +27,7 @@ const Index = (
                 className={clsx("flex size-10 rounded-full justify-center items-center font-semibold ", {
                     'bg-yellow-500 text-white': role === 'ADMIN',
                     'bg-gray-500 text-white': role === 'VIEWER',
+                    'bg-blue-500 text-white': role === 'CREATOR',
                 })}
             >
                 {

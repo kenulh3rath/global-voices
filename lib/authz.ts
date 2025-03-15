@@ -3,8 +3,9 @@
 Resource - TODO_list
 
 ROLES
-* Owner - Full access to all resources -> create, read, update, delete
-* User - Limited access to resources -> read
+* ADMIN    - Full access to all resources -> create, read, update, delete
+* CREATOR  - Limited access to resources -> create, read
+* VIEWER   - Limited access to resources -> read
 */
 
 // Authorization Policies
@@ -17,6 +18,10 @@ const POLICIES = {
     ],
     VIEWER: [
         "TODO::READ",
+    ],
+    CREATOR: [
+        "TODO::CREATE",
+        "TODO::READ"
     ]
 }
 

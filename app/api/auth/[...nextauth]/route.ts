@@ -50,7 +50,8 @@ export const authOptions: NextAuthOptions = {
                     query: GetUserLogin,
                     variables: {
                         email: credentials.email
-                    }
+                    },
+                    fetchPolicy: 'no-cache'
                 })
 
                 // If user not found

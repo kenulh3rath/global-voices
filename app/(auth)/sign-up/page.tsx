@@ -34,8 +34,8 @@ const Page = () => {
     const router = useRouter();
 
     // ~~~~~ Query calls ~~~~~
-    const [createUser, {loading: createUserLoading, data: createUserData}] = useMutation(NewUser);
-    const [createUserLogin, {loading: createUserLoginLoading, data: createUserLoginData}] = useMutation(CreateUserLogin);
+    const [createUser] = useMutation(NewUser);
+    const [createUserLogin] = useMutation(CreateUserLogin);
 
     // ~~~~~ States ~~~~~
     const [firstName, setFirstName] = useState<string>('');

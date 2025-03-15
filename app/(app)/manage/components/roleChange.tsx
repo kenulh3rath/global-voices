@@ -22,6 +22,7 @@ const Index = (
     const roles = [
         "ADMIN",
         "VIEWER",
+        "CREATOR"
     ]
 
     return (
