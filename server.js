@@ -76,6 +76,8 @@ const TypeDefs = `#graphql
             password: String!,
         ): UserLogin!  # Create a new user login
         
+        deleteUserByEmail(email: String!): User!  # Delete user by email
+        
         updateUserRoleByID(
             id: ID!,
             role: String!
@@ -185,6 +187,38 @@ const Resolvers = {
                     password: password
                 }
             })
+        },
+
+        /** Delete User by Email **/
+        deleteUserByEmail: async (_parent, args) => {
+            const { email } = args
+
+            // Delete User Login
+            await prisma.userLogin.delete({
+                where: {
+                    email: email
+                },
+            })
+
+            // Delete User
+            const deleteUser = await prisma.user.delete({
+                where: {
+                    email: email
+                },
+                select: {
+                    id: true,
+                    firstName: true,
+                    lastName: true,
+                    email: true
+                }
+            })
+
+            return {
+                id: deleteUser.id,
+                firstName: deleteUser.firstName,
+                lastName: deleteUser.lastName,
+                email: deleteUser.email
+            }
         },
 
         /** Update User Role by ID **/

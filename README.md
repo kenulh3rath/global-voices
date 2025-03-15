@@ -8,6 +8,7 @@ This is a simple To-Do List application that demonstrates,
 ### User Types
 
 - **ADMIN**
+- **CREATOR**
 - **VIEWER**
 
 ### User Permissions
@@ -16,6 +17,10 @@ This is a simple To-Do List application that demonstrates,
   - `Create`, `Read` and `Delete` To-Do Items
   - `Read` All Users
   - `Update` User Role
+  - `Delete` a User
+
+- **Creator**
+  - `Create` and `Read` To-Do Items
 
 - **Viewer**
   - `Read` To-Do Items

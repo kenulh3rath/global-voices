@@ -3,6 +3,7 @@
 import { gql, useQuery, useMutation } from "@apollo/client";
 import RoleChange from "@/app/(app)/manage/components/roleChange";
 import { toast } from "sonner"
+import DeleteUser from "@/app/(app)/manage/components/deleteUser";
 
 
 // Get all users
@@ -28,14 +29,28 @@ const UpdateUserRoleByID = gql`
     }
 `
 
+// Delete user by email
+const DeleteUserByEmail = gql`
+    mutation DeleteUserByEmail($email: String!) {
+        deleteUserByEmail(email: $email) {
+            id
+        }
+    }
+`
+
 const Index = () => {
 
-    const {data: users, loading: usersLoading} = useQuery(GetUsers);
+    // ~~~~ Query and Mutation ~~~~
+    const {data: users, loading: usersLoading} = useQuery(GetUsers); // Get all users
     const [updateUserRoleByID] = useMutation(UpdateUserRoleByID, {
         refetchQueries: [{query: GetUsers}]
-    });
+    });  // Update user role by id
+    const [deleteUserByEmail] = useMutation(DeleteUserByEmail, {
+        refetchQueries: [{query: GetUsers}]
+    });  // Delete user by email
 
 
+    // Change user role
     const ChangeRole = async (role: string, id: string) => {
         console.log(role, id);
         try {
@@ -51,6 +66,25 @@ const Index = () => {
                 duration: 2000,
             })
 
+
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    // Delete user
+    const DeleteUserByEmail_ = async (email: string) => {
+        try {
+            await deleteUserByEmail({
+                variables: {
+                    email: email
+                }
+            });
+
+            // Notify user
+            toast('User Deleted successfully', {
+                duration: 2000,
+            })
 
         } catch (e) {
             console.log(e);
@@ -99,10 +133,20 @@ const Index = () => {
 
                             </div>
 
-                            <RoleChange
-                                defaultValue={user.role}
-                                setValue={(value) => ChangeRole(value, user.id)}
-                            />
+                            <div className="flex gap-2 items-center">
+
+                                <RoleChange
+                                    defaultValue={user.role}
+                                    setValue={(value) => ChangeRole(value, user.id)}
+                                />
+
+                                <DeleteUser
+                                    deleteUser={() => DeleteUserByEmail_(user.email)}
+                                />
+
+                            </div>
+
+
 
                         </div>
                     ))
