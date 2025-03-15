@@ -100,6 +100,14 @@ Run the following command to install dependencies
   npm install
 ```
 
+### Generate Prisma Client
+
+Run the following command to generate the Prisma Client:
+
+```bash
+  npx prisma generate
+```
+
 
 ### Apollo Server
 
