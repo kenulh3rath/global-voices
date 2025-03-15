@@ -33,7 +33,7 @@ const Index = (
             open={dialogOpen}
         >
             <DialogTrigger
-                className={'mr-2 bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 h-9 px-4 py-2 has-[>svg]:px-3 rounded-md text-sm font-medium'}
+                className={'mr-2 bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 h-9 px-2 py-1 sm:px-4 sm:py-2 has-[>svg]:px-3 rounded-md text-sm font-medium'}
             >
                 Create
             </DialogTrigger>
@@ -55,7 +55,7 @@ const Index = (
                             type="text"
                             name="title"
                             id="title"
-                            className={'w-full p-2 border rounded focus:outline-none focus:ring focus:ring-primary'}
+                            className={'w-full p-2 border rounded focus:outline-none focus:ring focus:ring-primary '}
                             required={true}
                             autoComplete={'off'}
                         />
@@ -72,7 +72,7 @@ const Index = (
 
                     <Button
                         type="submit"
-                        className={'w-fit flex justify-self-end'}
+                        className={'w-fit flex justify-self-end px-2 py-1 sm:px-4 sm:py-2'}
                     >
                         Create
                     </Button>

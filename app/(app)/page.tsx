@@ -12,14 +12,14 @@ export default async function Home() {
 
     return (
         <div
-            className={'flex justify-center items-center w-screen h-screen'}
+            className={'flex justify-center items-center h-screen'}
         >
 
             <div
-                className={'w-3/4 h-5/6 p-2 rounded-lg shadow-2xl space-y-4'}
+                className={'w-full sm:w-3/4 h-5/6 p-2 rounded-lg shadow-2xl space-y-4'}
             >
 
-                <h3 className="text-4xl text-center font-bold">
+                <h3 className="text-2xl sm:text-4xl text-center font-bold">
                     TO-DO
                 </h3>
 

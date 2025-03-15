@@ -6,6 +6,7 @@ import {signIn} from "next-auth/react";
 import { useRouter } from 'next/navigation'
 import {toast} from "sonner";
 import Link from "next/link";
+import InputWithLabel from "@/components/inputWithLabel";
 
 const Page = () => {
     const router = useRouter();
@@ -54,55 +55,48 @@ const Page = () => {
         >
             
             <div
-                className="w-1/5 p-10 rounded-2xl space-y-4 bg-slate-50/80 shadow-lg"
+                className="sm:w-1/5 w-4/5 p-10 rounded-2xl space-y-2 sm:space-y-4 bg-slate-50/80 shadow-lg"
             >
 
                 <p
-                    className={'text-center text-4xl font-bold'}
+                    className={'text-center text-2xl sm:text-4xl font-bold'}
                 >
                     TO-DO
                 </p>
 
+                <p
+                    className={'text-center text-xl sm:text-2xl font-bold'}
+                >
+                    Login
+                </p>
+
                 <div className="space-y-2">
 
-                    <div className="">
-                        <label
-                            htmlFor={'email'}
-                            className={'text-lg'}
-                        >
-                            Email
-                        </label>
-                        <input
-                            id={'email'}
-                            name={'email'}
-                            type="email"
-                            placeholder={'johndoe@user.dev'}
-                            className={'w-full p-2 border rounded-lg focus:outline-none focus:border-slate-500'}
-                            autoComplete={'off'}
-                            required={true}
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                    </div>
+                    {/* Email input */}
+                    <InputWithLabel
+                        id={'email'}
+                        type={'email'}
+                        label={'Email'}
+                        placeholder={'johndoe@user.dev'}
+                        required={true}
+                        labelClassName={'text-lg'}
+                        inputClassName={'w-full p-2 border rounded-lg focus:outline-none focus:border-slate-500'}
+                        value={email}
+                        setValue={setEmail}
+                    />
 
-                    <div className="">
-                        <label
-                            htmlFor={'password'}
-                            className={'text-lg'}
-                        >
-                            Password
-                        </label>
-                        <input
-                            id={'password'}
-                            name={'password'}
-                            type="password"
-                            placeholder={'********'}
-                            className={'w-full p-2 border rounded-lg focus:outline-none focus:border-slate-500'}
-                            autoComplete={'off'}
-                            required={true}
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
+                    {/* Password input */}
+                    <InputWithLabel
+                        id={'password'}
+                        type={'password'}
+                        label={'Password'}
+                        placeholder={'********'}
+                        required={true}
+                        labelClassName={'text-lg'}
+                        inputClassName={'w-full p-2 border rounded-lg focus:outline-none focus:border-slate-500'}
+                        value={password}
+                        setValue={setPassword}
+                    >
                         {
                             error &&
                             <p
@@ -111,7 +105,7 @@ const Page = () => {
                                 {error}
                             </p>
                         }
-                    </div>
+                    </InputWithLabel>
 
                 </div>
 

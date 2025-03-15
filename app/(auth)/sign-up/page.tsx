@@ -6,6 +6,7 @@ import {toast} from "sonner";
 import {Button} from "@/components/ui/button";
 import { gql, useMutation } from "@apollo/client";
 import {HashPassword} from "@/app/actions/authConfigs";
+import InputWithLabel from "@/components/inputWithLabel";
 
 
 // ~~~~~ Queries ~~~~~
@@ -169,64 +170,47 @@ const Page = () => {
                         />
                     </div>
 
-                    <div className="col-span-2">
-                        <label
-                            htmlFor={'email'}
-                            className={'text-lg'}
-                        >
-                            Email
-                        </label>
-                        <input
-                            id={'email'}
-                            name={'email'}
-                            type="email"
-                            placeholder={'johndoe@user.dev'}
-                            className={'w-full p-2 border rounded-lg focus:outline-none focus:border-slate-500'}
-                            autoComplete={'off'}
-                            required={true}
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                    </div>
+                    {/* Email input */}
+                    <InputWithLabel
+                        id={'email'}
+                        type={'email'}
+                        label={'Email'}
+                        placeholder={'johndoe@user.dev'}
+                        required={true}
+                        rootClassName={'col-span-2'}
+                        labelClassName={'text-lg'}
+                        inputClassName={'w-full p-2 border rounded-lg focus:outline-none focus:border-slate-500'}
+                        value={email}
+                        setValue={setEmail}
+                    />
 
-                    <div className="col-span-2">
-                        <label
-                            htmlFor={'password'}
-                            className={'text-lg'}
-                        >
-                            Password
-                        </label>
-                        <input
-                            id={'password'}
-                            name={'password'}
-                            type="password"
-                            placeholder={'********'}
-                            className={'w-full p-2 border rounded-lg focus:outline-none focus:border-slate-500'}
-                            autoComplete={'off'}
-                            required={true}
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                    </div>
+                    {/* Password input */}
+                    <InputWithLabel
+                        id={'password'}
+                        type={'password'}
+                        label={'Password'}
+                        placeholder={'********'}
+                        required={true}
+                        rootClassName={'col-span-2'}
+                        labelClassName={'text-lg'}
+                        inputClassName={'w-full p-2 border rounded-lg focus:outline-none focus:border-slate-500'}
+                        value={password}
+                        setValue={setPassword}
+                    />
 
-                    <div className="col-span-2">
-                        <label
-                            htmlFor={'passwordConfirm'}
-                            className={'text-lg'}
-                        >
-                            Confirm Password
-                        </label>
-                        <input
-                            id={'passwordConfirm'}
-                            name={'passwordConfirm'}
-                            type="password"
-                            placeholder={'********'}
-                            className={'w-full p-2 border rounded-lg focus:outline-none focus:border-slate-500'}
-                            autoComplete={'off'}
-                            required={true}
-                            value={passwordConfirm}
-                            onChange={(e) => setPasswordConfirm(e.target.value)}
-                        />
+                    {/* Confirm Password input */}
+                    <InputWithLabel
+                        id={'passwordConfirm'}
+                        type={'password'}
+                        label={'Confirm Password'}
+                        placeholder={'********'}
+                        required={true}
+                        rootClassName={'col-span-2'}
+                        labelClassName={'text-lg'}
+                        inputClassName={'w-full p-2 border rounded-lg focus:outline-none focus:border-slate-500'}
+                        value={passwordConfirm}
+                        setValue={setPasswordConfirm}
+                    >
                         {
                             error &&
                             <p
@@ -240,7 +224,7 @@ const Page = () => {
                         >
                             Password must be at least 6 characters long
                         </p>
-                    </div>
+                    </InputWithLabel>
 
                 </div>
 

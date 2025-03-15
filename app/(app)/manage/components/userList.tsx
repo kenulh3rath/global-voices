@@ -93,12 +93,12 @@ const Index = () => {
 
     return (
         <div
-            className={'grid grid-cols-2 gap-4'}
+            className={'grid sm:grid-cols-2 gap-4'}
         >
             {
                 usersLoading && (
                     <div
-                        className={'col-span-4 text-3xl text-center text-gray-500'}
+                        className={'sm:col-span-2 text-3xl text-center text-gray-500'}
                     >
                         Loading...
                     </div>
@@ -115,18 +115,18 @@ const Index = () => {
                     }) => (
                         <div
                             key={user.id}
-                            className={'flex justify-between items-center rounded-2xl p-2 shadow-xl duration-200 hover:bg-slate-50'}
+                            className={'flex sm:flex-row flex-col gap-4 sm:gap-0 justify-between items-center rounded-2xl p-2 shadow-xl duration-200 hover:bg-slate-50'}
                         >
-                            <div className="">
+                            <div className="text-center sm:text-left">
 
                                 <h1
-                                    className={'text-xl font-semibold'}
+                                    className={'text-base sm:text-xl font-semibold'}
                                 >
                                     {user.firstName} {user.lastName}
                                 </h1>
 
                                 <p
-                                    className={'text-gray-500'}
+                                    className={'text-sm sm:text-base text-gray-500'}
                                 >
                                     {user.email}
                                 </p>

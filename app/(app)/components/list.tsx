@@ -208,9 +208,9 @@ const Index = (
                                     className={'w-full h-fit flex items-center gap-2 p-2 rounded-lg shadow-md bg-gray-50 duration-200 ease-in-out hover:bg-gray-100'}
                                 >
                                     <div className="basis-11/12 flex flex-col space-y-2">
-                                        <h4 className="text-lg font-semibold">{todo.title}</h4>
+                                        <h4 className="text-base sm:text-lg font-semibold">{todo.title}</h4>
                                         <p
-                                            className={'mx-2 text-wrap w-4/5 text-slate-600'}
+                                            className={'mx-2 text-wrap w-4/5 text-slate-600 text-sm sm:text-base'}
                                         >{todo.description}</p>
                                     </div>
 
@@ -221,7 +221,7 @@ const Index = (
                                             <Button
                                                 onClick={() => OnDeleteClick(todo.id)}
                                                 disabled={listItem === todo.id}
-                                                className={'basis-1/12'}
+                                                className={'basis-1/12 px-2 py-1 sm:px-4 sm:py-2'}
                                             >
                                                 {
                                                     listItem === todo.id ? 'Deleting...' : 'Delete'

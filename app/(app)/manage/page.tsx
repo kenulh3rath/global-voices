@@ -17,7 +17,7 @@ const Page = async () => {
             className={'p-2 space-y-4'}
         >
             <h1
-                className={'text-2xl font-semibold'}
+                className={'text-2xl font-semibold sm:text-left text-center'}
             >
                 Users
             </h1>
