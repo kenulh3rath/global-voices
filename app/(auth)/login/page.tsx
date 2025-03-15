@@ -131,7 +131,7 @@ const Page = () => {
                     <p
                         className={'text-sm sm:text-base'}
                     >
-                        Don't have an account?
+                        Don{"'"}t have an account?
                     </p>
                     <Link
                         href={'/sign-up'}
