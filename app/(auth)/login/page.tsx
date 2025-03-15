@@ -79,7 +79,7 @@ const Page = () => {
                         label={'Email'}
                         placeholder={'johndoe@user.dev'}
                         required={true}
-                        labelClassName={'text-lg'}
+                        labelClassName={'sm:text-lg'}
                         inputClassName={'w-full p-2 border rounded-lg focus:outline-none focus:border-slate-500'}
                         value={email}
                         setValue={setEmail}
@@ -92,7 +92,7 @@ const Page = () => {
                         label={'Password'}
                         placeholder={'********'}
                         required={true}
-                        labelClassName={'text-lg'}
+                        labelClassName={'sm:text-lg'}
                         inputClassName={'w-full p-2 border rounded-lg focus:outline-none focus:border-slate-500'}
                         value={password}
                         setValue={setPassword}
@@ -129,13 +129,13 @@ const Page = () => {
                     className={'text-center'}
                 >
                     <p
-                        className={'text-'}
+                        className={'text-sm sm:text-base'}
                     >
                         Don't have an account?
                     </p>
                     <Link
                         href={'/sign-up'}
-                        className={'underline'}
+                        className={'underline text-sm sm:text-lg'}
                     >
                         Sign Up
                     </Link>

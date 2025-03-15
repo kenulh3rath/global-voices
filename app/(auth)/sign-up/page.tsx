@@ -7,6 +7,7 @@ import {Button} from "@/components/ui/button";
 import { gql, useMutation } from "@apollo/client";
 import {HashPassword} from "@/app/actions/authConfigs";
 import InputWithLabel from "@/components/inputWithLabel";
+import Link from "next/link";
 
 
 // ~~~~~ Queries ~~~~~
@@ -107,17 +108,17 @@ const Page = () => {
         >
 
             <div
-                className="w-1/5 p-5 rounded-2xl space-y-4 bg-slate-50/80 shadow-lg"
+                className="sm:w-1/5 w-4/5 p-5 rounded-2xl space-y-4 bg-slate-50/80 shadow-lg"
             >
 
                 <p
-                    className={'text-center text-4xl font-bold'}
+                    className={'text-center text-2xl sm:text-4xl font-bold'}
                 >
                     TO-DO
                 </p>
 
                 <p
-                    className={'text-center text-2xl font-bold'}
+                    className={'text-center text-xl sm:text-2xl font-bold'}
                 >
                     Register
                 </p>
@@ -130,45 +131,34 @@ const Page = () => {
 
                 <div className="grid grid-cols-2 gap-4 space-y-2">
 
-                    <div className="">
-                        <label
-                            htmlFor={'firstName'}
-                            className={'text-lg'}
-                        >
-                            First Name
-                        </label>
-                        <input
-                            id={'firstName'}
-                            name={'firstName'}
-                            type="text"
-                            placeholder={'John'}
-                            className={'w-full p-2 border rounded-lg focus:outline-none focus:border-slate-500'}
-                            autoComplete={'off'}
-                            required={true}
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
-                        />
-                    </div>
+                    {/* First Name input */}
+                    <InputWithLabel
+                        id={'firstName'}
+                        type={'text'}
+                        label={'First Name'}
+                        placeholder={'John'}
+                        required={true}
+                        rootClassName={'col-span-2 sm:col-span-1'}
+                        labelClassName={'sm:text-lg'}
+                        inputClassName={'w-full p-2 border rounded-lg focus:outline-none focus:border-slate-500'}
+                        value={firstName}
+                        setValue={setFirstName}
+                    />
 
-                    <div className="">
-                        <label
-                            htmlFor={'lastName'}
-                            className={'text-lg'}
-                        >
-                            Last Name
-                        </label>
-                        <input
-                            id={'lastName'}
-                            name={'lastName'}
-                            type="text"
-                            placeholder={'Doe'}
-                            className={'w-full p-2 border rounded-lg focus:outline-none focus:border-slate-500'}
-                            autoComplete={'off'}
-                            required={true}
-                            value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
-                        />
-                    </div>
+
+                    {/* Last Name input */}
+                    <InputWithLabel
+                        id={'lastName'}
+                        type={'text'}
+                        label={'Last Name'}
+                        placeholder={'Doe'}
+                        required={true}
+                        rootClassName={'col-span-2 sm:col-span-1'}
+                        labelClassName={'sm:text-lg'}
+                        inputClassName={'w-full p-2 border rounded-lg focus:outline-none focus:border-slate-500'}
+                        value={lastName}
+                        setValue={setLastName}
+                    />
 
                     {/* Email input */}
                     <InputWithLabel
@@ -178,7 +168,7 @@ const Page = () => {
                         placeholder={'johndoe@user.dev'}
                         required={true}
                         rootClassName={'col-span-2'}
-                        labelClassName={'text-lg'}
+                        labelClassName={'sm:text-lg'}
                         inputClassName={'w-full p-2 border rounded-lg focus:outline-none focus:border-slate-500'}
                         value={email}
                         setValue={setEmail}
@@ -192,7 +182,7 @@ const Page = () => {
                         placeholder={'********'}
                         required={true}
                         rootClassName={'col-span-2'}
-                        labelClassName={'text-lg'}
+                        labelClassName={'sm:text-lg'}
                         inputClassName={'w-full p-2 border rounded-lg focus:outline-none focus:border-slate-500'}
                         value={password}
                         setValue={setPassword}
@@ -206,7 +196,7 @@ const Page = () => {
                         placeholder={'********'}
                         required={true}
                         rootClassName={'col-span-2'}
-                        labelClassName={'text-lg'}
+                        labelClassName={'sm:text-lg'}
                         inputClassName={'w-full p-2 border rounded-lg focus:outline-none focus:border-slate-500'}
                         value={passwordConfirm}
                         setValue={setPasswordConfirm}
@@ -220,7 +210,7 @@ const Page = () => {
                             </p>
                         }
                         <p
-                            className={'text-sm text-center text-slate-500'}
+                            className={'text-xs sm:text-sm text-center text-slate-500'}
                         >
                             Password must be at least 6 characters long
                         </p>
@@ -253,7 +243,25 @@ const Page = () => {
                     }
                 </Button>
 
+                {/* Log In */}
+                <div
+                    className={'text-center'}
+                >
+                    <p
+                        className={'text-sm sm:text-base'}
+                    >
+                        Already have an account?
+                    </p>
+                    <Link
+                        href={'/login'}
+                        className={'underline text-sm sm:text-lg'}
+                    >
+                        Log In
+                    </Link>
+                </div>
+
             </div>
+
 
         </form>
     )
