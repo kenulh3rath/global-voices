@@ -71,6 +71,11 @@ const TypeDefs = `#graphql
             email: String!
         ): User!  # Create a new user
         
+        createUserLogin(
+            email: ID!,
+            password: String!,
+        ): UserLogin!  # Create a new user login
+        
         updateUserRoleByID(
             id: ID!,
             role: String!
@@ -166,10 +171,20 @@ const Resolvers = {
                     firstName: firstName,
                     lastName: lastName,
                     email: email,
-                    role: 'USER'
                 }
             })
 
+        },
+
+        /** Create User Login **/
+        createUserLogin: async (_parent, args) => {
+            const { email, password } = args
+            return prisma.userLogin.create({
+                data: {
+                    email: email,
+                    password: password
+                }
+            })
         },
 
         /** Update User Role by ID **/

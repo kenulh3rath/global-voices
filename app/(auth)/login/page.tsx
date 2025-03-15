@@ -5,6 +5,7 @@ import {FormEvent, useState} from "react";
 import {signIn} from "next-auth/react";
 import { useRouter } from 'next/navigation'
 import {toast} from "sonner";
+import Link from "next/link";
 
 const Page = () => {
     const router = useRouter();
@@ -52,7 +53,7 @@ const Page = () => {
         >
             
             <div
-                className="w-2xl p-5 rounded-2xl space-y-4 bg-slate-50/80 shadow-lg"
+                className="w-1/5 p-10 rounded-2xl space-y-4 bg-slate-50/80 shadow-lg"
             >
 
                 <p
@@ -74,6 +75,7 @@ const Page = () => {
                             id={'email'}
                             name={'email'}
                             type="email"
+                            placeholder={'johndoe@user.dev'}
                             className={'w-full p-2 border rounded-lg focus:outline-none focus:border-slate-500'}
                             autoComplete={'off'}
                             required={true}
@@ -93,6 +95,7 @@ const Page = () => {
                             id={'password'}
                             name={'password'}
                             type="password"
+                            placeholder={'********'}
                             className={'w-full p-2 border rounded-lg focus:outline-none focus:border-slate-500'}
                             autoComplete={'off'}
                             required={true}
@@ -115,15 +118,36 @@ const Page = () => {
                     type={'submit'}
                     // onClick={HandleLogin}
                     className={'flex mx-auto w-2/3 p-2  rounded-lg'}
-                    disabled={loading}
+                    disabled={
+                        loading ||
+                        !email ||
+                        !password
+                    }
                 >
                     {
                         loading ? 'Loading...' : 'Login'
                     }
                 </Button>
 
+                {/* Sign Up */}
+                <div
+                    className={'text-center'}
+                >
+                    <p
+                        className={'text-'}
+                    >
+                        Don't have an account?
+                    </p>
+                    <Link
+                        href={'/sign-up'}
+                        className={'underline'}
+                    >
+                        Sign Up
+                    </Link>
+                </div>
+
             </div>
-            
+
         </form>
     )
 }

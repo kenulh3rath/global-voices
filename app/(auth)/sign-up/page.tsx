@@ -1,10 +1,277 @@
+'use client'
+
+import {FormEvent, useState} from "react";
+import { useRouter } from 'next/navigation'
+import {toast} from "sonner";
+import {Button} from "@/components/ui/button";
+import { gql, useMutation } from "@apollo/client";
+import {HashPassword} from "@/app/actions/authConfigs";
 
 
-const Page = async () => {
+// ~~~~~ Queries ~~~~~
+
+// Create new user
+const NewUser = gql`
+    mutation CreateUser($firstName: String!, $lastName: String!, $email: String!) {
+        createUser(firstName: $firstName, lastName: $lastName, email: $email) {
+            email
+        }
+    }
+`
+
+// Create new user login
+const CreateUserLogin = gql`
+    mutation CreateUserLogin($email: ID!, $password: String!) {
+        createUserLogin(email: $email, password: $password) {
+            email
+        }
+    }
+`
+
+const Page = () => {
+
+    // ~~~~~ Hooks ~~~~~
+    const router = useRouter();
+
+    // ~~~~~ Query calls ~~~~~
+    const [createUser, {loading: createUserLoading, data: createUserData}] = useMutation(NewUser);
+    const [createUserLogin, {loading: createUserLoginLoading, data: createUserLoginData}] = useMutation(CreateUserLogin);
+
+    // ~~~~~ States ~~~~~
+    const [firstName, setFirstName] = useState<string>('');
+    const [lastName, setLastName] = useState<string>('');
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [passwordConfirm, setPasswordConfirm] = useState<string>('');
+    const [error, setError] = useState<string>();
+    const [loading, setLoading] = useState<boolean>(false);
+
+    // Create new user
+    const HandleSignIn = async (e: FormEvent<HTMLFormElement>) => {
+
+        e.preventDefault()
+
+        setLoading(true)
+        setError(undefined)
+
+        // Another validation to check if password and confirm password are the same
+        if (password !== passwordConfirm) {
+            setError('Passwords do not match')
+            setLoading(false)
+            return
+        }
+
+        const hashedPassword = await HashPassword(password)
+
+        try {
+
+            // Create new user
+            await createUser({
+                variables: {
+                    firstName: firstName,
+                    lastName: lastName,
+                    email: email
+                }
+            })
+
+            // Create new user login
+            await createUserLogin({
+                variables: {
+                    email: email,
+                    password: hashedPassword
+                }
+            })
+
+            // Notify user
+            toast('User created successfully', {
+                duration: 2000
+            })
+
+            // Redirect to login page
+            router.push('/login')
+
+        }
+        catch (error) {
+            console.error(error)
+            setError('An error occurred')
+            setLoading(false)
+        }
+
+    }
+
     return (
-        <div>
-            <h1>Page</h1>
-        </div>
+        <form
+            onSubmit={HandleSignIn}
+            className={'flex h-screen w-screen items-center justify-center'}
+        >
+
+            <div
+                className="w-1/5 p-5 rounded-2xl space-y-4 bg-slate-50/80 shadow-lg"
+            >
+
+                <p
+                    className={'text-center text-4xl font-bold'}
+                >
+                    TO-DO
+                </p>
+
+                <p
+                    className={'text-center text-2xl font-bold'}
+                >
+                    Register
+                </p>
+
+                <p
+                    className={'text-center text-sm'}
+                >
+                    Contact Admin to get Admin access
+                </p>
+
+                <div className="grid grid-cols-2 gap-4 space-y-2">
+
+                    <div className="">
+                        <label
+                            htmlFor={'firstName'}
+                            className={'text-lg'}
+                        >
+                            First Name
+                        </label>
+                        <input
+                            id={'firstName'}
+                            name={'firstName'}
+                            type="text"
+                            placeholder={'John'}
+                            className={'w-full p-2 border rounded-lg focus:outline-none focus:border-slate-500'}
+                            autoComplete={'off'}
+                            required={true}
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="">
+                        <label
+                            htmlFor={'lastName'}
+                            className={'text-lg'}
+                        >
+                            Last Name
+                        </label>
+                        <input
+                            id={'lastName'}
+                            name={'lastName'}
+                            type="text"
+                            placeholder={'Doe'}
+                            className={'w-full p-2 border rounded-lg focus:outline-none focus:border-slate-500'}
+                            autoComplete={'off'}
+                            required={true}
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="col-span-2">
+                        <label
+                            htmlFor={'email'}
+                            className={'text-lg'}
+                        >
+                            Email
+                        </label>
+                        <input
+                            id={'email'}
+                            name={'email'}
+                            type="email"
+                            placeholder={'johndoe@user.dev'}
+                            className={'w-full p-2 border rounded-lg focus:outline-none focus:border-slate-500'}
+                            autoComplete={'off'}
+                            required={true}
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="col-span-2">
+                        <label
+                            htmlFor={'password'}
+                            className={'text-lg'}
+                        >
+                            Password
+                        </label>
+                        <input
+                            id={'password'}
+                            name={'password'}
+                            type="password"
+                            placeholder={'********'}
+                            className={'w-full p-2 border rounded-lg focus:outline-none focus:border-slate-500'}
+                            autoComplete={'off'}
+                            required={true}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="col-span-2">
+                        <label
+                            htmlFor={'passwordConfirm'}
+                            className={'text-lg'}
+                        >
+                            Confirm Password
+                        </label>
+                        <input
+                            id={'passwordConfirm'}
+                            name={'passwordConfirm'}
+                            type="password"
+                            placeholder={'********'}
+                            className={'w-full p-2 border rounded-lg focus:outline-none focus:border-slate-500'}
+                            autoComplete={'off'}
+                            required={true}
+                            value={passwordConfirm}
+                            onChange={(e) => setPasswordConfirm(e.target.value)}
+                        />
+                        {
+                            error &&
+                            <p
+                                className={'text-red-500'}
+                            >
+                                {error}
+                            </p>
+                        }
+                        <p
+                            className={'text-sm text-center text-slate-500'}
+                        >
+                            Password must be at least 6 characters long
+                        </p>
+                    </div>
+
+                </div>
+
+                <Button
+                    type={'submit'}
+                    // onClick={HandleLogin}
+                    className={'flex mx-auto w-2/3 p-2  rounded-lg'}
+
+                    // Validations
+                    disabled={
+                        loading ||
+                        !email ||
+                        !password ||
+                        !passwordConfirm ||
+                        password !== passwordConfirm ||
+                        password.length < 6 ||
+                        firstName === '' ||
+                        lastName === '' ||
+                        email === '' ||
+                        password === '' ||
+                        passwordConfirm === ''
+                    }
+                >
+                    {
+                        loading ? 'Loading...' : 'Login'
+                    }
+                </Button>
+
+            </div>
+
+        </form>
     )
 }
 
