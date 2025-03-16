@@ -121,6 +121,16 @@ export const authOptions: NextAuthOptions = {
                     throw new Error('Invalid password. You have ' + (USER_LOGIN_ATTEMPTS - (user.attempts + 1)) + ' attempts left')
                 }
 
+                // Reset login attempts
+                await client.mutate({
+                    mutation: UpdateLoginAttemptsByEmail,
+                    variables: {
+                        email: credentials.email,
+                        attempts: 0
+                    },
+                    fetchPolicy: 'no-cache'
+                })
+
                 return {
                     id: user.user.id + '',
                     email: user.email,
